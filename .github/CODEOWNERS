@@ -1,0 +1,3 @@
+# Deny paths: an engineer always reviews these.
+/.github/ @dwatts-fsl
+/package.json @dwatts-fsl
