@@ -10,3 +10,8 @@ export function words(text: string): string[] {
 export function countWords(text: string): number {
   return words(text).length;
 }
+
+/** Joins the lower-case words of text with `-`, splitting as `words()` does. */
+export function slugify(text: string): string {
+  return words(text).join('-');
+}
