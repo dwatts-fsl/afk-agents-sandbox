@@ -11,6 +11,33 @@ export function countWords(text: string): number {
   return words(text).length;
 }
 
+/** The ellipsis `truncate()` appends when none is given. */
+export const DEFAULT_ELLIPSIS = '…';
+
+/**
+ * Shortens text to at most `max` code points, ellipsis included. Cuts at the
+ * last whitespace before the limit when there is one, else mid-word.
+ */
+export function truncate(text: string, max: number, ellipsis = DEFAULT_ELLIPSIS): string {
+  if (max < 0) throw new RangeError(`max must be >= 0, got ${max}`);
+  const chars = [...text];
+  if (chars.length <= max) return text;
+  const ellipsisChars = [...ellipsis];
+  if (max < ellipsisChars.length) return ellipsisChars.slice(0, max).join('');
+
+  const budget = max - ellipsisChars.length;
+  const hardCut = chars.slice(0, budget).join('').trimEnd();
+  // chars[budget] always exists here; `?? ''` only satisfies noUncheckedIndexedAccess.
+  if (isSpace(chars[budget] ?? '')) return hardCut + ellipsis;
+  const lastSpace = chars.slice(0, budget).findLastIndex(isSpace);
+  const wordCut = chars.slice(0, Math.max(lastSpace, 0)).join('').trimEnd();
+  return (wordCut || hardCut) + ellipsis;
+}
+
+function isSpace(c: string): boolean {
+  return /\s/u.test(c);
+}
+
 /** Joins the lower-case words of text with `-`, splitting as `words()` does. */
 export function slugify(text: string): string {
   return words(text).join('-');
