@@ -56,3 +56,41 @@ export function initials(text: string): string {
     .map((w) => [...w][0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/** Lower-case singular → plural for nouns the suffix rules in `pluralize()` get wrong. */
+const IRREGULAR_PLURALS: Readonly<Record<string, string>> = {
+  man: 'men',
+  woman: 'women',
+  child: 'children',
+  person: 'people',
+  mouse: 'mice',
+  goose: 'geese',
+  foot: 'feet',
+  tooth: 'teeth',
+  ox: 'oxen',
+  leaf: 'leaves',
+  knife: 'knives',
+  sheep: 'sheep',
+  fish: 'fish',
+  deer: 'deer',
+  series: 'series',
+  species: 'species',
+};
+
+/**
+ * Returns `word` when `count` is 1, else its English plural: irregular nouns
+ * from a fixed table, then `-es` after s/x/z/ch/sh, `-ies` after consonant + y,
+ * else `-s`. Matches irregulars case-insensitively and keeps a leading capital.
+ */
+export function pluralize(word: string, count: number): string {
+  if (count === 1) return word;
+  const irregular = Object.hasOwn(IRREGULAR_PLURALS, word.toLowerCase())
+    ? IRREGULAR_PLURALS[word.toLowerCase()]
+    : undefined;
+  if (irregular !== undefined) {
+    return /^\p{Lu}/u.test(word) ? irregular.replace(/^./u, (c) => c.toUpperCase()) : irregular;
+  }
+  if (/(?:[sxz]|ch|sh)$/iu.test(word)) return `${word}es`;
+  if (/[^aeiou]y$/iu.test(word)) return `${word.slice(0, -1)}ies`;
+  return `${word}s`;
+}
