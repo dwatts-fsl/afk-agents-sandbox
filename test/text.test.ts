@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, slugify, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -69,5 +69,21 @@ describe('DEFAULT_ELLIPSIS', () => {
   it('is the single-character ellipsis truncate uses by default', () => {
     expect(DEFAULT_ELLIPSIS).toBe('…');
     expect(truncate('abcdefghij', 5)).toBe(`abcd${DEFAULT_ELLIPSIS}`);
+  });
+});
+
+describe('slugify', () => {
+  it('joins lower-case words with hyphens', () => {
+    expect(slugify('Hello, World!')).toBe('hello-world');
+  });
+  it('returns empty for empty or blank text', () => {
+    expect(slugify('')).toBe('');
+    expect(slugify('  ')).toBe('');
+  });
+  it('keeps accented letters as-is', () => {
+    expect(slugify('Café au lait')).toBe('café-au-lait');
+  });
+  it('has no leading, trailing or double hyphens', () => {
+    expect(slugify('--a  b--')).toBe('a-b');
   });
 });

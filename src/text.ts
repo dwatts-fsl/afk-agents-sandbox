@@ -37,3 +37,8 @@ export function truncate(text: string, max: number, ellipsis = DEFAULT_ELLIPSIS)
 function isSpace(c: string): boolean {
   return /\s/u.test(c);
 }
+
+/** Joins the lower-case words of text with `-`, splitting as `words()` does. */
+export function slugify(text: string): string {
+  return words(text).join('-');
+}
