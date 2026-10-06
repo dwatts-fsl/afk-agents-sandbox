@@ -56,3 +56,8 @@ export function initials(text: string): string {
     .map((w) => [...w][0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/** Repeats text n times, joined by sep. */
+export function repeat(text: string, n: number, sep = ''): string {
+  return Array(n).fill(text).join(sep);
+}

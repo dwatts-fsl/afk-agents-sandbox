@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, initials, repeat, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -113,5 +113,12 @@ describe('initials', () => {
   });
   it('handles accented letters', () => {
     expect(initials('élodie durand')).toBe('ÉD');
+  });
+});
+
+describe('repeat', () => {
+  it('repeats text with a separator', () => {
+    expect(repeat('ab', 3)).toBe('ababab');
+    expect(repeat('x', 2, '-')).toBe('x-x');
   });
 });
