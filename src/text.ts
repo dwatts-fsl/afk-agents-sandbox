@@ -56,3 +56,8 @@ export function initials(text: string): string {
     .map((w) => [...w][0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/** Reverses text by Unicode code point, so astral characters such as emoji stay intact. */
+export function reverse(text: string): string {
+  return [...text].reverse().join('');
+}
