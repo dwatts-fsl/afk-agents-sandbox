@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -101,5 +101,17 @@ describe('titleCase', () => {
   });
   it('upper-cases accented first letters', () => {
     expect(titleCase('élan vital')).toBe('Élan Vital');
+  });
+});
+
+describe('initials', () => {
+  it('joins the upper-cased first letters of each word', () => {
+    expect(initials('Ada Lovelace')).toBe('AL');
+  });
+  it('returns an empty string for blank text', () => {
+    expect(initials('  ')).toBe('');
+  });
+  it('handles accented letters', () => {
+    expect(initials('élodie durand')).toBe('ÉD');
   });
 });
