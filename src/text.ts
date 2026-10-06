@@ -5,3 +5,8 @@ export function words(text: string): string[] {
     .split(/[^\p{L}\p{N}]+/u)
     .filter((w) => w.length > 0);
 }
+
+/** Counts the words in text, splitting as `words()` does. */
+export function countWords(text: string): number {
+  return words(text).length;
+}
