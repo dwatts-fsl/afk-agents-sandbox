@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, initials, pluralize, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -113,5 +113,45 @@ describe('initials', () => {
   });
   it('handles accented letters', () => {
     expect(initials('élodie durand')).toBe('ÉD');
+  });
+});
+
+describe('pluralize', () => {
+  it('returns the word unchanged when count is 1', () => {
+    expect(pluralize('cat', 1)).toBe('cat');
+    expect(pluralize('child', 1)).toBe('child');
+  });
+  it('adds -s for other counts', () => {
+    expect(pluralize('cat', 2)).toBe('cats');
+    expect(pluralize('cat', 0)).toBe('cats');
+  });
+  it('treats negative and fractional counts as plural', () => {
+    expect(pluralize('cat', -1)).toBe('cats');
+    expect(pluralize('cat', 1.5)).toBe('cats');
+  });
+  it('adds -es after s, x, z, ch and sh', () => {
+    expect(pluralize('box', 0)).toBe('boxes');
+    expect(pluralize('bus', 2)).toBe('buses');
+    expect(pluralize('buzz', 2)).toBe('buzzes');
+    expect(pluralize('church', 2)).toBe('churches');
+    expect(pluralize('dish', 2)).toBe('dishes');
+  });
+  it('turns consonant + y into -ies, but keeps vowel + y', () => {
+    expect(pluralize('city', 2)).toBe('cities');
+    expect(pluralize('day', 2)).toBe('days');
+  });
+  it('uses the irregular table', () => {
+    const irregulars: [string, string][] = [
+      ['man', 'men'], ['woman', 'women'], ['child', 'children'], ['person', 'people'],
+      ['mouse', 'mice'], ['goose', 'geese'], ['foot', 'feet'], ['tooth', 'teeth'],
+      ['ox', 'oxen'], ['leaf', 'leaves'], ['knife', 'knives'],
+      ['sheep', 'sheep'], ['fish', 'fish'], ['deer', 'deer'], ['series', 'series'], ['species', 'species'],
+    ];
+    for (const [singular, plural] of irregulars) expect(pluralize(singular, 2)).toBe(plural);
+  });
+  it('matches irregulars case-insensitively and keeps a leading capital', () => {
+    expect(pluralize('Child', 2)).toBe('Children');
+    expect(pluralize('Ox', 2)).toBe('Oxen');
+    expect(pluralize('Sheep', 2)).toBe('Sheep');
   });
 });
