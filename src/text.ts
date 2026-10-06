@@ -49,3 +49,10 @@ export function titleCase(text: string): string {
     .map((w) => w.replace(/^./u, (c) => c.toUpperCase()))
     .join(' ');
 }
+
+/** Joins the upper-cased first letters of each word of text, splitting as `words()` does. */
+export function initials(text: string): string {
+  return words(text)
+    .map((w) => [...w][0]?.toUpperCase() ?? '')
+    .join('');
+}
