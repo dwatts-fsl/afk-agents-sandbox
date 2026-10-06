@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, initials, reverse, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -113,5 +113,17 @@ describe('initials', () => {
   });
   it('handles accented letters', () => {
     expect(initials('élodie durand')).toBe('ÉD');
+  });
+});
+
+describe('reverse', () => {
+  it('reverses the characters of text', () => {
+    expect(reverse('abc')).toBe('cba');
+  });
+  it('returns empty text unchanged', () => {
+    expect(reverse('')).toBe('');
+  });
+  it('reverses by code point, so emoji survive', () => {
+    expect(reverse('a😀b')).toBe('b😀a');
   });
 });
