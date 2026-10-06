@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, slugify, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -85,5 +85,21 @@ describe('slugify', () => {
   });
   it('has no leading, trailing or double hyphens', () => {
     expect(slugify('--a  b--')).toBe('a-b');
+  });
+});
+
+describe('titleCase', () => {
+  it('capitalises each word', () => {
+    expect(titleCase('hello WORLD')).toBe('Hello World');
+  });
+  it('collapses punctuation and extra whitespace to single spaces', () => {
+    expect(titleCase('  hello,   world! ')).toBe('Hello World');
+  });
+  it('returns empty for empty or blank text', () => {
+    expect(titleCase('')).toBe('');
+    expect(titleCase('  ')).toBe('');
+  });
+  it('upper-cases accented first letters', () => {
+    expect(titleCase('élan vital')).toBe('Élan Vital');
   });
 });

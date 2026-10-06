@@ -42,3 +42,10 @@ function isSpace(c: string): boolean {
 export function slugify(text: string): string {
   return words(text).join('-');
 }
+
+/** Capitalises each word of text and joins them with single spaces, splitting as `words()` does. */
+export function titleCase(text: string): string {
+  return words(text)
+    .map((w) => w.replace(/^./u, (c) => c.toUpperCase()))
+    .join(' ');
+}
