@@ -11,11 +11,14 @@ export function countWords(text: string): number {
   return words(text).length;
 }
 
+/** The ellipsis `truncate()` appends when none is given. */
+export const DEFAULT_ELLIPSIS = '…';
+
 /**
  * Shortens text to at most `max` code points, ellipsis included. Cuts at the
  * last whitespace before the limit when there is one, else mid-word.
  */
-export function truncate(text: string, max: number, ellipsis = '…'): string {
+export function truncate(text: string, max: number, ellipsis = DEFAULT_ELLIPSIS): string {
   if (max < 0) throw new RangeError(`max must be >= 0, got ${max}`);
   const chars = [...text];
   if (chars.length <= max) return text;

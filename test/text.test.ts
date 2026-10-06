@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { countWords, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, countWords, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -62,5 +62,12 @@ describe('truncate', () => {
   it('returns the ellipsis sliced to max when max is shorter than it', () => {
     expect(truncate('hello world', 2, '...')).toBe('..');
     expect(truncate('hello world', 0)).toBe('');
+  });
+});
+
+describe('DEFAULT_ELLIPSIS', () => {
+  it('is the single-character ellipsis truncate uses by default', () => {
+    expect(DEFAULT_ELLIPSIS).toBe('…');
+    expect(truncate('abcdefghij', 5)).toBe(`abcd${DEFAULT_ELLIPSIS}`);
   });
 });
