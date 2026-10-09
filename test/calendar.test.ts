@@ -29,6 +29,12 @@ describe('unfoldLines', () => {
   it('lets a blank line end a fold that is already under way', () => {
     expect(unfoldLines('A:1\r\n b\r\n\r\n c')).toEqual(['A:1b', 'c']);
   });
+  it('does not fold a continuation across a blank line followed by a whitespace-only line', () => {
+    expect(unfoldLines('A:1\r\n\r\n \r\n b')).toEqual(['A:1', 'b']);
+  });
+  it('folds a continuation that follows leading blank lines into a line of its own', () => {
+    expect(unfoldLines('\r\n\r\n B')).toEqual(['B']);
+  });
   it('still folds a whitespace-only line, which is a continuation and not a blank line', () => {
     expect(unfoldLines('A:1\r\n \r\n b')).toEqual(['A:1b']);
   });
