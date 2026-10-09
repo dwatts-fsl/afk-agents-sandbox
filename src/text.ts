@@ -56,3 +56,10 @@ export function initials(text: string): string {
     .map((w) => [...w][0]?.toUpperCase() ?? '')
     .join('');
 }
+
+/** Joins the words of text, lower-casing the first and capitalising the rest, splitting as `words()` does. */
+export function camelCase(text: string): string {
+  return words(text)
+    .map((w, i) => (i === 0 ? w : w.replace(/^./u, (c) => c.toUpperCase())))
+    .join('');
+}
