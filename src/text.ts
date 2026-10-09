@@ -43,6 +43,11 @@ export function slugify(text: string): string {
   return words(text).join('-');
 }
 
+/** Joins the lower-case words of text with `_`, splitting as `words()` does. */
+export function snakeCase(text: string): string {
+  return words(text).join('_');
+}
+
 /** Joins the capitalised words of text with single spaces, splitting as `words()` does. */
 export function titleCase(text: string): string {
   return words(text)
