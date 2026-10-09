@@ -71,19 +71,13 @@ export function camelCase(text: string): string {
 export function wrap(text: string, width: number): string[] {
   if (!(width >= 1)) throw new RangeError(`width must be >= 1, got ${width}`);
   const lines: string[] = [];
-  let line = '';
-  let lineLength = 0;
-  for (const word of text.split(/\s+/u).filter((w) => w.length > 0)) {
-    const wordLength = [...word].length;
-    if (lineLength > 0 && lineLength + 1 + wordLength <= width) {
-      line += ` ${word}`;
-      lineLength += 1 + wordLength;
+  for (const word of text.match(/\S+/gu) ?? []) {
+    const last = lines.at(-1);
+    if (last !== undefined && [...last].length + 1 + [...word].length <= width) {
+      lines[lines.length - 1] = `${last} ${word}`;
     } else {
-      if (lineLength > 0) lines.push(line);
-      line = word;
-      lineLength = wordLength;
+      lines.push(word);
     }
   }
-  if (lineLength > 0) lines.push(line);
   return lines;
 }
