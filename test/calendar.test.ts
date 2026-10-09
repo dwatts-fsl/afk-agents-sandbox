@@ -35,6 +35,13 @@ describe('unfoldLines', () => {
   it('folds a continuation that follows leading blank lines into a line of its own', () => {
     expect(unfoldLines('\r\n\r\n B')).toEqual(['B']);
   });
+  it('keeps trailing and inner whitespace on a line', () => {
+    expect(unfoldLines('A:1 \r\nB:2\t\r\nC:x  y')).toEqual(['A:1 ', 'B:2\t', 'C:x  y']);
+  });
+  it('keeps the rest of the whitespace of a continuation line that has no line before it', () => {
+    expect(unfoldLines('  X:1')).toEqual([' X:1']);
+    expect(unfoldLines(' \tX:1')).toEqual(['\tX:1']);
+  });
   it('still folds a whitespace-only line, which is a continuation and not a blank line', () => {
     expect(unfoldLines('A:1\r\n \r\n b')).toEqual(['A:1b']);
   });
