@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, camelCase, countWords, initials, slugify, titleCase, truncate, words, wrap } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, camelCase, countWords, initials, slugify, snakeCase, titleCase, truncate, words, wrap } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -132,6 +132,18 @@ describe('camelCase', () => {
   });
   it('upper-cases accented first letters of later words', () => {
     expect(camelCase('Café élan')).toBe('caféÉlan');
+  });
+});
+
+describe('snakeCase', () => {
+  it('joins lower-case words with underscores', () => {
+    expect(snakeCase('Hello World')).toBe('hello_world');
+  });
+  it('collapses punctuation and extra whitespace', () => {
+    expect(snakeCase('  The quick, brown fox! ')).toBe('the_quick_brown_fox');
+  });
+  it('returns empty for empty text', () => {
+    expect(snakeCase('')).toBe('');
   });
 });
 
