@@ -42,6 +42,16 @@ describe('unfoldLines', () => {
     expect(unfoldLines('  X:1')).toEqual([' X:1']);
     expect(unfoldLines(' \tX:1')).toEqual(['\tX:1']);
   });
+  it('does not treat a bare CR as a line ending', () => {
+    expect(unfoldLines('A:1\rB:2')).toEqual(['A:1\rB:2']);
+  });
+  it('lets only a space or tab start a continuation', () => {
+    expect(unfoldLines('A:1\r\n\fb')).toEqual(['A:1', '\fb']);
+    expect(unfoldLines('A:1\r\n b')).toEqual(['A:1', ' b']);
+  });
+  it('drops only empty lines, keeping a line that holds just whitespace', () => {
+    expect(unfoldLines('A:1\r\n\r\n  ')).toEqual(['A:1', ' ']);
+  });
   it('still folds a whitespace-only line, which is a continuation and not a blank line', () => {
     expect(unfoldLines('A:1\r\n \r\n b')).toEqual(['A:1b']);
   });
