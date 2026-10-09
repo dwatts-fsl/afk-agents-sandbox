@@ -86,6 +86,9 @@ describe('slugify', () => {
   it('has no leading, trailing or double hyphens', () => {
     expect(slugify('--a  b--')).toBe('a-b');
   });
+  it('lower-cases non-ASCII letters and keeps digits', () => {
+    expect(slugify('  Ünïcode  Straße 2 ')).toBe('ünïcode-straße-2');
+  });
 });
 
 describe('titleCase', () => {
