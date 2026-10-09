@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, camelCase, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, camelCase, countWords, initials, slugify, titleCase, truncate, words, wrap } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -132,5 +132,34 @@ describe('camelCase', () => {
   });
   it('upper-cases accented first letters of later words', () => {
     expect(camelCase('Café élan')).toBe('caféÉlan');
+  });
+});
+
+describe('wrap', () => {
+  it('breaks at spaces into lines of at most width', () => {
+    expect(wrap('the quick brown fox', 10)).toEqual(['the quick', 'brown fox']);
+  });
+  it('gives a word longer than width its own line without splitting it', () => {
+    expect(wrap('hello', 3)).toEqual(['hello']);
+    expect(wrap('a unbelievable b', 5)).toEqual(['a', 'unbelievable', 'b']);
+  });
+  it('returns no lines for empty or blank text', () => {
+    expect(wrap('', 5)).toEqual([]);
+    expect(wrap('   ', 5)).toEqual([]);
+  });
+  it('throws RangeError when width is below 1', () => {
+    expect(() => wrap('hello', 0)).toThrow(RangeError);
+    expect(() => wrap('hello', -1)).toThrow(RangeError);
+    expect(() => wrap('hello', Number.NaN)).toThrow(RangeError);
+  });
+  it('fits a line exactly at width', () => {
+    expect(wrap('abc def ghi', 7)).toEqual(['abc def', 'ghi']);
+  });
+  it('collapses runs of whitespace and ignores leading and trailing whitespace', () => {
+    expect(wrap('  the   quick  ', 20)).toEqual(['the quick']);
+  });
+  it('counts code points, not UTF-16 units', () => {
+    expect(wrap('😀😀 😀😀', 5)).toEqual(['😀😀 😀😀']);
+    expect(wrap('😀😀 😀😀', 4)).toEqual(['😀😀', '😀😀']);
   });
 });

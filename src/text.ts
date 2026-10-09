@@ -63,3 +63,21 @@ export function camelCase(text: string): string {
     .map((w, i) => (i === 0 ? w : w.replace(/^./u, (c) => c.toUpperCase())))
     .join('');
 }
+
+/**
+ * Breaks text into lines of at most `width` code points, only at whitespace.
+ * A word longer than `width` gets a line of its own and is never split.
+ */
+export function wrap(text: string, width: number): string[] {
+  if (!(width >= 1)) throw new RangeError(`width must be >= 1, got ${width}`);
+  const lines: string[] = [];
+  for (const word of text.match(/\S+/gu) ?? []) {
+    const last = lines.at(-1);
+    if (last !== undefined && [...last].length + 1 + [...word].length <= width) {
+      lines[lines.length - 1] = `${last} ${word}`;
+    } else {
+      lines.push(word);
+    }
+  }
+  return lines;
+}
