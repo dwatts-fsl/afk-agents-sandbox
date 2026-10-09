@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_ELLIPSIS, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
+import { DEFAULT_ELLIPSIS, camelCase, countWords, initials, slugify, titleCase, truncate, words } from '../src/text.js';
 
 describe('words', () => {
   it('splits on punctuation and whitespace, lower-cased', () => {
@@ -113,5 +113,21 @@ describe('initials', () => {
   });
   it('handles accented letters', () => {
     expect(initials('élodie durand')).toBe('ÉD');
+  });
+});
+
+describe('camelCase', () => {
+  it('lower-cases the first word and capitalises the rest', () => {
+    expect(camelCase('hello world')).toBe('helloWorld');
+  });
+  it('collapses punctuation, case and extra whitespace', () => {
+    expect(camelCase('  Foo-BAR_baz 2 ')).toBe('fooBarBaz2');
+  });
+  it('returns empty for empty or blank text', () => {
+    expect(camelCase('')).toBe('');
+    expect(camelCase('  ')).toBe('');
+  });
+  it('upper-cases accented first letters of later words', () => {
+    expect(camelCase('Café élan')).toBe('caféÉlan');
   });
 });
